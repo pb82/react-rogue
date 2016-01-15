@@ -1,0 +1,135 @@
+@font-face {
+    font-family: 'Pacifico';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Pacifico Regular'), local('Pacifico-Regular'), url(../fonts/pacifico.woff2) format('woff2'), url(../fonts/pacifico.woff) format('woff');
+}
+
+html, body {
+    height: 100%;
+    font-family: Arial;
+    background: lightgray;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+div.game {
+    background: #eaeaea;
+    text-align: center;
+    border: 1px solid darkgray;
+    padding: 15px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+span.error, span.info {
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    background: red;
+    padding: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    display: block;
+}
+
+span.error {
+    margin-top: 15px;
+}
+
+span.info {
+    background-color: blue;
+}
+
+div.cell {
+    width: 32px;
+    height: 32px;
+    background: darkgray;
+}
+
+div.block {
+    width: 100%;
+    height: 100%;
+    color: white;
+    margin: 0 auto;
+}
+
+.off {
+    background-color: black !important;
+}
+
+.wall {
+    background-image: url(../img/wall.png) !important;
+}
+
+.floor {
+    background-image: url(../img/floor.png) !important;
+}
+
+.player {
+    background-image: url(../img/player.png) !important;
+}
+
+.door {
+    background-image: url(../img/door.png) !important;
+}
+
+.door:hover, .doorOpen:hover {
+    cursor: move;
+    border: 1px solid blue;
+}
+
+.doorOpen {
+    background-image: url(../img/door_open.png) !important;
+}
+
+div.column {
+    display: inline-block;
+}
+
+.linkBtn {
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+    margin-left: 15px;
+    border-bottom: 1px dotted black;
+}
+
+div.console {
+    padding: 4px;
+    border: 2px solid black;
+    background-color: #FEFEFE;
+    border-radius: 5px;
+    font-family: 'Pacifico';
+    font-size: 1.0em;
+}
+
+div.console .prompt {
+    margin-right: 5px;
+}
+
+div.console span.normal {
+    color: black;
+}
+
+div.console span.positive {
+    color: green;
+}
+
+div.console span.negative {
+    color: red;
+}
+
+div.console span.help {
+    color: dodgerblue;
+}
