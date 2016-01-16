@@ -6,7 +6,7 @@ import { on } from "./events";
 
 export default React.createClass({
     componentDidMount() {
-        on("rerender", () => {
+        on("rerender", "field", () => {
             this.forceUpdate();
         });
     },

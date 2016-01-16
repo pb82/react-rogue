@@ -72,6 +72,10 @@ div.block {
     background-image: url(../img/wall.png) !important;
 }
 
+.glibber {
+    background-image: url(../img/wall_glibber.png) !important;
+}
+
 .floor {
     background-image: url(../img/floor.png) !important;
 }
@@ -84,9 +88,18 @@ div.block {
     background-image: url(../img/door.png) !important;
 }
 
+.zombie {
+    background-image: url(../img/zombie.png) !important;
+}
+
 .door:hover, .doorOpen:hover {
     cursor: move;
     border: 1px solid blue;
+}
+
+.zombie:hover {
+    cursor: crosshair;
+    border: 1px solid red;
 }
 
 .doorOpen {

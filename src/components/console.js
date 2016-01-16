@@ -13,7 +13,7 @@ export default React.createClass({
     },
 
     componentDidMount() {
-        on("log", this.log);
+        on("log", "console", this.log);
     },
 
     log(data) {

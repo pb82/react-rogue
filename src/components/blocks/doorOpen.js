@@ -3,7 +3,7 @@
 export const ID = 4;
 
 import { ID as Door } from "./door";
-import { distance } from "../vector";
+import { distance } from "../algorithms";
 import { emit } from "../events";
 
 export const ACCESSIBLE = true;

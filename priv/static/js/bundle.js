@@ -90,21 +90,33 @@
 
 	        document.addEventListener("keydown", this.keyDown);
 	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        // Cleanup
+	        document.removeEventListener("keydown", this.keyDown);
+	    },
 	    componentDidMount: function componentDidMount() {
+	        // Display a welcome message when the game is loaded
 	        (0, _events.emit)("log", { text: "Good luck!", type: "normal" });
 	        (0, _events.emit)("log", { text: "type `h`", type: "help" });
 	        (0, _events.emit)("log", { text: "If you need help, ", type: "normal" });
 	        (0, _events.emit)("log", { text: "Welcome to react-rogue!", type: "normal" });
 	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	        document.removeEventListener("keydown", this.keyDown);
-	    },
 	    help: function help() {
+	        // Ingame help
 	        (0, _events.emit)("log", { text: "interacted with.", type: "help" });
 	        (0, _events.emit)("log", { text: "Hover items to see if they can be", type: "help" });
 	        (0, _events.emit)("log", { text: "the mouse to interact with things.", type: "help" });
 	        (0, _events.emit)("log", { text: "Use cursor keys to move. Use", type: "help" });
 	    },
+
+	    /**
+	     * Move the player if the position could be advanced.
+	     *
+	     * @param axis The axis on which to move
+	     * @param d The differental value
+	     * @param text The text to display in the log of the
+	     * movement was successful
+	     */
 	    move: function move(axis, d, text) {
 	        var _this = this;
 
@@ -114,25 +126,35 @@
 	                _this.setState({
 	                    viewport: viewport
 	                });
+	                (0, _events.emit)("turn");
 	            } else {
 	                (0, _events.emit)("log", { text: "Oh no! The way is blocked!" });
+	                (0, _events.emit)("turn");
 	            }
 	        });
 	    },
+
+	    /**
+	     * Main interaction point. As the game is turn based, nothing will
+	     * happen until a key is pressed.
+	     *
+	     * @param key Key code
+	     * @returns {*} Nothing
+	     */
 	    keyDown: function keyDown(key) {
 	        switch (key.keyCode) {
 	            case 38:
-	                return this.move("y", -1, "North");
+	                this.move("y", -1, "North");break;
 	            case 40:
-	                return this.move("y", 1, "South");
+	                this.move("y", 1, "South");break;
 	            case 37:
-	                return this.move("x", -1, "West");
+	                this.move("x", -1, "West");break;
 	            case 39:
-	                return this.move("x", 1, "East");
+	                this.move("x", 1, "East");break;
 	            case 72:
-	                return this.help();
+	                this.help();break;
 	            default:
-	                return null;
+	                break;
 	        }
 	    },
 	    getInitialState: function getInitialState() {
@@ -143,9 +165,14 @@
 	                s: 9,
 	                player: {
 	                    sight: 5
-	                }
+	                },
+	                enemies: [{
+	                    x: 10,
+	                    y: 10,
+	                    id: 998
+	                }]
 	            },
-	            map: [[{ t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }], [{ t: 1 }, { t: 0 }, { t: 0 }, { t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 0 }, { t: 0 }, { t: 1 }, { t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 3 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 0 }, { t: 1 }, { t: 0 }, { t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 0 }, { t: 1 }, { t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 1 }, { t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 0 }, { t: 1 }], [{ t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }]]
+	            map: [[{ t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 3 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }]]
 	        };
 	    },
 	    render: function render() {
@@ -171,8 +198,40 @@
 	var _index = __webpack_require__(3);
 
 	exports.default = {
-	    getMask: function getMask() {
-	        return [[{ t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }], [{ t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }], [{ t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }], [{ t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }], [{ t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }], [{ t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }], [{ t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }], [{ t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }], [{ t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }, { t: -1 }]];
+	    /**
+	     * Return a mask that is used to expand the field
+	     * of view on. Initially the mask contains only `Off`
+	     * fields and data from the viewport is copied as the
+	     * field of view expands from the players position.
+	     *
+	     * We have to create a fresh mask for every turn since
+	     * objects are stored as references and the mask would
+	     * remember it's old values otherwise.
+	     *
+	     * @param s Size of the map (rectangular)
+	     * @returns {Array} The mask
+	     */
+
+	    getMask: function getMask(s) {
+	        var mask = [];
+	        for (var x = 0; x < s; x++) {
+	            var row = [];
+	            for (var y = 0; y < s; y++) {
+	                row.push({ t: _index.Off.ID });
+	            }
+	            mask.push(row);
+	        }
+	        return mask;
+	    },
+	    isEnemyPosition: function isEnemyPosition(viewport, x, y) {
+	        for (var i = 0; i < viewport.enemies.length; i++) {
+	            var enemy = viewport.enemies[i];
+	            if (enemy.x === x && enemy.y === y) {
+	                return enemy;
+	            }
+	        }
+
+	        return false;
 	    },
 
 	    /**
@@ -186,25 +245,34 @@
 	        // The array containing the cropped region
 	        var region = [];
 
+	        // Always rectangular, so x and y are the same
+	        var center = Math.floor(viewport.s / 2);
+
 	        // Where to start cropping
-	        var fromX = viewport.x - Math.floor(viewport.s / 2);
-	        var fromY = viewport.y - Math.floor(viewport.s / 2);
+	        var fromX = viewport.x - center;
+	        var fromY = viewport.y - center;
 
 	        for (var x = fromX; x < fromX + viewport.s; x++) {
 	            var row = [];
 	            for (var y = fromY; y < fromY + viewport.s; y++) {
-	                // The players position: draw player sprite
-	                if (x === viewport.x && y === viewport.y) {
-	                    row.push({ t: 2 });
+	                var enemy = this.isEnemyPosition(viewport, x, y);
+	                if (enemy) {
+	                    row.push({
+	                        t: enemy.id,
+	                        enemy: enemy,
+	                        playerX: viewport.x,
+	                        playerY: viewport.y,
+	                        map: map
+	                    });
+	                } else if (x === viewport.x && y === viewport.y) {
+	                    // The players position: draw player sprite
+	                    row.push({ t: _index.Player.ID });
 	                    continue;
-	                }
-
-	                if (y < 0 || x < 0) {
-	                    // Out of map: too small
-	                    row.push({ t: -1, visible: false });
-	                } else if (map[y] !== undefined && map[y][x] !== undefined) {
-	                    // Inside map. Need to check for 'undefined' because 0 is
-	                    // valid here (and also evaluates to 'false'
+	                } else if (y < 0 || x < 0) {
+	                    // Out of bounds (too small)
+	                    row.push({ t: _index.Off.ID, visible: false });
+	                } else if (map[y] && map[y][x]) {
+	                    // Current position is valid and inside the map
 	                    var block = map[y][x];
 
 	                    // Add context info to relevant blocks
@@ -214,28 +282,49 @@
 	                    block.playerX = viewport.x;
 	                    block.playerY = viewport.y;
 	                    block.player = viewport.player;
+	                    block.map = map;
 	                    row.push(block);
 	                } else {
-	                    // Out of map: too large
-	                    row.push({ t: -1, visible: false });
+	                    // Out of bounds (too large)
+	                    row.push({ t: _index.Off.ID, visible: false });
 	                }
 	            }
 	            region.push(row);
 	        }
 
-	        var mask = this.getMask();
-	        this.expand(region, mask, Math.floor(viewport.s / 2), Math.floor(viewport.s / 2), viewport.player.sight);
-	        return mask;
+	        // Hide blocks that are not in sight
+	        // var mask = this.getMask(viewport.s);
+	        // this.expand(region, mask, center, center, viewport.player.sight);
+	        // return mask;
+	        return region;
 	    },
+
+	    /**
+	     * Expands the field of view for `c` cycles, copying the blocks
+	     * from `r` to `m`. The expansion usually starts in the middle
+	     * of the region (where the player is positioned)
+	     * @param r Region
+	     * @param m Mask
+	     * @param x expansion start X
+	     * @param y expansion start Y
+	     * @param c Cycles to go
+	     */
 	    expand: function expand(r, m, x, y, c) {
-	        if (c <= 0 || r[y] === undefined || r[y][x] === undefined || r[y][x].visible) {
+	        // Exit condition. Exit if either
+	        // cycles === 0 (end of sight)
+	        // or current position out-of-map
+	        // or the field has been visited already
+	        if (c <= 0 || !r[y] || !r[y][x] || r[y][x].visible) {
 	            return;
 	        }
 
+	        // Copy from viewport to mask and mark the field as
+	        // already visited
 	        m[y][x] = r[y][x];
 	        r[y][x].visible = true;
 
-	        if (r[y] !== undefined && r[y][x] !== undefined && (0, _index.accessible)(r[y][x])) {
+	        // Expand recursively on accessible neighbours
+	        if (r[y] && r[y][x] && (0, _index.accessible)(r[y][x])) {
 	            this.expand(r, m, x + 1, y, c - 1);
 	            this.expand(r, m, x, y + 1, c - 1);
 	            this.expand(r, m, x, y - 1, c - 1);
@@ -243,67 +332,27 @@
 	        }
 	    },
 
-	    /*
-	     __getMask: function (w, h) {
-	     var mask = [];
-	      for (let x = 0; x < w; x++) {
-	     var col = [];
-	     for (let y = 0; y < h; y++) {
-	     col.push({t: -1});
-	     }
-	     mask.push(col);
-	     }
-	      return mask;
-	     },
-	      __toViewport: function (viewport, map) {
-	     var view = [];
-	      var boundsX = Math.floor(viewport.w / 2);
-	     var boundsY = Math.floor(viewport.h / 2);
-	      for (let x = 0; x < viewport.w; x++) {
-	     var row = [];
-	     for (let y = 0; y < viewport.h; y++) {
-	     let _y = y + viewport.y - boundsY;
-	     let _x = x + viewport.x - boundsX;
-	      if (_x === viewport.x && _y === viewport.y) {
-	     row.push({t: 2});
-	     continue;
-	     }
-	      if (map[_y] === undefined) {
-	     row.push({t:-1});
-	     } else if (map[_y][_x] === undefined) {
-	     row.push({t:-1});
-	     } else {
-	     row.push(map[_y][_x]);
-	     }
-	     }
-	     view.push(row);
-	     }
-	      var mask = this.getMask(viewport.w, viewport.h);
-	     this.expand(view, mask, boundsX, boundsY, 4);
-	      for (let x = 0; x < viewport.w; x++) {
-	     for (let y = 0; y < viewport.h; y++) {
-	     if (mask[y] && mask[y][x].t === -1) {
-	     view[y][x].t = -1;
-	     }
-	     }
-	     }
-	      return view;
-	     },
-	      __expand: function (map, mask, x, y, tries) {
-	     if (tries <= 0) return;
-	     mask[y][x] = map[y][x];
-	      if (map[y][x].t !== 0 && map[y][x].t !== 2) return;
-	      if(mask[y][x-1].t === -1) this.expand(map, mask, x - 1, y, tries - 1);
-	     if(mask[y][x+1].t === -1) this.expand(map, mask, x + 1, y, tries - 1);
-	     if(mask[y+1] && mask[y+1][x].t === -1) this.expand(map, mask, x, y + 1, tries - 1);
-	     if(mask[y-1] && mask[y-1][x].t === -1) this.expand(map, mask, x, y - 1, tries - 1);
-	     }
-	      */
-
+	    /**
+	     * Create advance functions. An advance function will increment
+	     * the position of the player in the viewport if the next field
+	     * is accessible. Otherwise the old viewport is returned.
+	     *
+	     * @param map The complete map
+	     * @param axis The axis on which to adcanve
+	     * @returns {Function} A callback that is invoked with the
+	     * next viewport. The first argument indicates if the viewport
+	     * could be advanced.
+	     */
 	    advance: function advance(map, axis) {
+	        var that = this;
+
 	        if (axis === "x") {
 	            // advance on X axis
 	            return function (viewport, dx, callback) {
+	                if (that.isEnemyPosition(viewport, viewport.x + dx, viewport.y)) {
+	                    return callback(true, viewport);
+	                }
+
 	                if ((0, _index.accessible)(map[viewport.y][viewport.x + dx])) {
 	                    viewport.x += dx;
 	                    return callback(null, viewport);
@@ -314,6 +363,10 @@
 	        } else {
 	            // Advance on Y axis
 	            return function (viewport, dy, callback) {
+	                if (that.isEnemyPosition(viewport, viewport.x, viewport.y + dy)) {
+	                    return callback(true, viewport);
+	                }
+
 	                if ((0, _index.accessible)(map[viewport.y + dy][viewport.x])) {
 	                    viewport.y += dy;
 	                    return callback(null, viewport);
@@ -334,7 +387,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Off = exports.Player = exports.Floor = exports.Wall = exports.DoorOpen = exports.Door = undefined;
+	exports.Zombie = exports.Off = exports.Player = exports.Floor = exports.Wall = exports.DoorOpen = exports.Door = undefined;
 	exports.accessible = accessible;
 
 	var _door = __webpack_require__(4);
@@ -361,6 +414,10 @@
 
 	var _Player = _interopRequireWildcard(_player);
 
+	var _zombie = __webpack_require__(17);
+
+	var _Zombie = _interopRequireWildcard(_zombie);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	var Door = exports.Door = _Door;
@@ -369,6 +426,7 @@
 	var Floor = exports.Floor = _Floor;
 	var Player = exports.Player = _Player;
 	var Off = exports.Off = _Off;
+	var Zombie = exports.Zombie = _Zombie;
 
 	function accessible(block) {
 	    switch (block.t) {
@@ -384,6 +442,8 @@
 	            return _Player.ACCESSIBLE;
 	        case _Off.ID:
 	            return _Off.ACCESSIBLE;
+	        case _Zombie.ID:
+	            return _Zombie.ACCESSIBLE;
 	        default:
 	            return false;
 	    }
@@ -402,7 +462,7 @@
 
 	var _doorOpen = __webpack_require__(5);
 
-	var _vector = __webpack_require__(6);
+	var _algorithms = __webpack_require__(16);
 
 	var _events = __webpack_require__(7);
 
@@ -419,7 +479,7 @@
 	    },
 
 	    mouseDown: function mouseDown() {
-	        if ((0, _vector.distance)({
+	        if ((0, _algorithms.distance)({
 	            x: this.props.context.blockX,
 	            y: this.props.context.blockY
 	        }, {
@@ -469,7 +529,7 @@
 
 	var _door = __webpack_require__(4);
 
-	var _vector = __webpack_require__(6);
+	var _algorithms = __webpack_require__(16);
 
 	var _events = __webpack_require__(7);
 
@@ -486,7 +546,7 @@
 	    },
 
 	    mouseDown: function mouseDown() {
-	        if ((0, _vector.distance)({
+	        if ((0, _algorithms.distance)({
 	            x: this.props.context.blockX,
 	            y: this.props.context.blockY
 	        }, {
@@ -524,25 +584,7 @@
 	});
 
 /***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.distance = distance;
-	/**
-	 * The distance between two positions in 2-dimensional space
-	 * @param a
-	 * @param b
-	 */
-	function distance(a, b) {
-	  return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
-	};
-
-/***/ },
+/* 6 */,
 /* 7 */
 /***/ function(module, exports) {
 
@@ -552,16 +594,33 @@
 	    value: true
 	});
 	exports.on = on;
+	exports.off = off;
 	exports.emit = emit;
 	var events = {};
 
-	function on(event, callback) {
-	    events[event] = callback;
+	function on(event, receiver, callback) {
+	    if (!events[event]) {
+	        events[event] = {};
+	    }
+
+	    events[event][receiver] = callback;
+	};
+
+	function off(event, receiver) {
+	    if (events[event]) {
+	        delete events[event][receiver];
+	    }
 	};
 
 	function emit(event, data) {
 	    if (events[event]) {
-	        events[event](data);
+	        for (var prop in events[event]) {
+	            if (!events[event].hasOwnProperty(prop)) {
+	                continue;
+	            } else {
+	                events[event][prop](data);
+	            }
+	        }
 	    }
 	}
 
@@ -574,17 +633,19 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var ID = exports.ID = 1;
+	var ID = exports.ID = 2;
 
 	var ACCESSIBLE = exports.ACCESSIBLE = false;
 
 	var Wall = exports.Wall = React.createClass({
 	    displayName: "Wall",
 	    render: function render() {
+	        var cssClass = this.props.context.type || "wall";
+
 	        return React.createElement(
 	            "div",
 	            { className: "cell" },
-	            React.createElement("div", { className: "block wall" })
+	            React.createElement("div", { className: "block " + cssClass })
 	        );
 	    }
 	});
@@ -598,17 +659,18 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var ID = exports.ID = 0;
+	var ID = exports.ID = 1;
 
 	var ACCESSIBLE = exports.ACCESSIBLE = true;
 
 	var Floor = exports.Floor = React.createClass({
 	    displayName: "Floor",
 	    render: function render() {
+	        var cssClass = this.props.context.type || "";
 	        return React.createElement(
 	            "div",
 	            { className: "cell" },
-	            React.createElement("div", { className: "block floor" })
+	            React.createElement("div", { className: "block floor " + cssClass })
 	        );
 	    }
 	});
@@ -622,7 +684,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var ID = exports.ID = -1;
+	var ID = exports.ID = 0;
 
 	var ACCESSIBLE = exports.ACCESSIBLE = false;
 
@@ -646,7 +708,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var ID = exports.ID = 2;
+	var ID = exports.ID = 999;
 
 	var ACCESSIBLE = exports.ACCESSIBLE = true;
 
@@ -688,7 +750,7 @@
 	    componentDidMount: function componentDidMount() {
 	        var _this = this;
 
-	        (0, _events.on)("rerender", function () {
+	        (0, _events.on)("rerender", "field", function () {
 	            _this.forceUpdate();
 	        });
 	    },
@@ -772,6 +834,8 @@
 	                        return React.createElement(_index.Door.Door, { context: _this.props.cell, parent: _this });
 	                    case _index.DoorOpen.ID:
 	                        return React.createElement(_index.DoorOpen.DoorOpen, { context: _this.props.cell, parent: _this });
+	                    case _index.Zombie.ID:
+	                        return React.createElement(_index.Zombie.Zombie, { context: _this.props.cell, parent: _this });
 	                    default:
 	                        return null;
 	                }
@@ -803,7 +867,7 @@
 	        };
 	    },
 	    componentDidMount: function componentDidMount() {
-	        (0, _events.on)("log", this.log);
+	        (0, _events.on)("log", "console", this.log);
 	    },
 	    log: function log(data) {
 	        this.state.messages.push(data);
@@ -840,6 +904,304 @@
 	                        message.text
 	                    )
 	                );
+	            })
+	        );
+	    }
+	});
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.AStar = exports.PriorityQueue = undefined;
+	exports.distance = distance;
+
+	var _index = __webpack_require__(3);
+
+	var _events = __webpack_require__(7);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * The distance between two positions in 2-dimensional space
+	 * @param a
+	 * @param b
+	 */
+	function distance(a, b) {
+	    return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
+	};
+
+	/**
+	 * A container that holds it's items always sorted by
+	 * a `priority` attribute.
+	 */
+
+	var PriorityQueue = exports.PriorityQueue = (function () {
+	    function PriorityQueue() {
+	        _classCallCheck(this, PriorityQueue);
+
+	        this.clear();
+	    }
+
+	    /**
+	     * Put item into queue. Will be sorted automatically.
+	     * @param item The item to put in
+	     * @param priority Item priority (smaller is more important)
+	     */
+
+	    _createClass(PriorityQueue, [{
+	        key: "put",
+	        value: function put(item, priority) {
+	            this.queue.unshift({ item: item, priority: priority });
+	            this.queue.sort(function (a, b) {
+	                return a.priority - b.priority;
+	            });
+	        }
+
+	        /**
+	         * Return the most important item and simultaneously remove
+	         * it from the queue.
+	         * @returns {*}
+	         */
+
+	    }, {
+	        key: "pop",
+	        value: function pop() {
+	            var item = this.queue.splice(0, 1);
+	            return item[0].item;
+	        }
+	    }, {
+	        key: "empty",
+	        value: function empty() {
+	            return this.queue.length === 0;
+	        }
+	    }, {
+	        key: "clear",
+	        value: function clear() {
+	            this.queue = [];
+	        }
+	    }]);
+
+	    return PriorityQueue;
+	})();
+
+	;
+
+	/**
+	 * An implementation of the A* algorithm for finding the
+	 * optimal path between two points (if there is one)
+	 */
+
+	var _AStar = (function () {
+	    function _AStar() {
+	        _classCallCheck(this, _AStar);
+
+	        this.frontier = new PriorityQueue();
+	    }
+
+	    // Creates a (pseudo) hash for a cell
+
+	    _createClass(_AStar, [{
+	        key: "hash",
+	        value: function hash(map, cell) {
+	            return (cell.y + 1) * map.length + (cell.x + 1);
+	        }
+
+	        // Return all accessible neighours of a cell (no diagonal movements
+	        // allowed)hhh
+
+	    }, {
+	        key: "getNeighbours",
+	        value: function getNeighbours(map, cell) {
+	            var result = [];
+
+	            if ((0, _index.accessible)(map[cell.y][cell.x - 1])) {
+	                result.unshift({ y: cell.y, x: cell.x - 1 });
+	            }
+	            if ((0, _index.accessible)(map[cell.y][cell.x + 1])) {
+	                result.unshift({ y: cell.y, x: cell.x + 1 });
+	            }
+	            if ((0, _index.accessible)(map[cell.y + 1][cell.x])) {
+	                result.unshift({ y: cell.y + 1, x: cell.x });
+	            }
+	            if ((0, _index.accessible)(map[cell.y - 1][cell.x])) {
+	                result.unshift({ y: cell.y - 1, x: cell.x });
+	            }
+
+	            return result;
+	        }
+	    }, {
+	        key: "replayPath",
+	        value: function replayPath(map, cameFrom, start, goal) {
+	            var current = goal;
+	            var path = [current];
+	            var done = false;
+
+	            while (!done) {
+	                if (current.x === start.x && current.y === start.y) {
+	                    done = true;
+	                } else {
+	                    current = cameFrom[this.hash(map, current)];
+	                    path.unshift(current);
+	                }
+	            }
+
+	            return path;
+	        }
+	    }, {
+	        key: "calculatePath",
+	        value: function calculatePath(map, start, goal) {
+	            var _this = this;
+
+	            var finished = false;
+	            this.frontier.put(start, 0);
+
+	            var costSoFar = {};
+	            var cameFrom = {};
+
+	            costSoFar[this.hash(map, start)] = 0;
+
+	            var _loop = function _loop() {
+	                var current = _this.frontier.pop();
+
+	                if (current.x == goal.x && current.y == goal.y) {
+	                    finished = true;
+	                } else {
+	                    neighbours = _this.getNeighbours(map, current);
+
+	                    neighbours.forEach(function (next) {
+	                        var nextId = _this.hash(map, next);
+	                        var currentId = _this.hash(map, current);
+
+	                        var newCost = costSoFar[currentId] + 1;
+
+	                        if (costSoFar[nextId] === undefined || newCost < costSoFar[nextId]) {
+
+	                            costSoFar[nextId] = newCost;
+	                            var priority = newCost + distance({
+	                                x: goal.x, y: goal.y
+	                            }, {
+	                                x: next.x, y: next.y
+	                            });
+
+	                            _this.frontier.put(next, priority);
+	                            cameFrom[nextId] = current;
+	                        }
+	                    });
+	                }
+	            };
+
+	            while (!this.frontier.empty() && !finished) {
+	                var neighbours;
+
+	                _loop();
+	            }
+
+	            this.frontier.clear();
+	            if (finished) {
+	                return this.replayPath(map, cameFrom, start, goal);
+	            } else {
+	                return null;
+	            }
+	        }
+	    }]);
+
+	    return _AStar;
+	})();
+
+	;
+
+	var AStar = exports.AStar = new _AStar();
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Zombie = exports.ACCESSIBLE = exports.ID = undefined;
+
+	var _events = __webpack_require__(7);
+
+	var _index = __webpack_require__(3);
+
+	var _algorithms = __webpack_require__(16);
+
+	var ID = exports.ID = 998;
+
+	var ACCESSIBLE = exports.ACCESSIBLE = false;
+
+	var Zombie = exports.Zombie = React.createClass({
+	    displayName: "Zombie",
+	    getInitialState: function getInitialState() {
+	        return {
+	            id: Math.floor(Math.random() * 1000000) + ''
+	        };
+	    },
+	    componentDidMount: function componentDidMount() {
+	        (0, _events.on)("turn", this.state.id, this.turn);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        (0, _events.off)("turn", this.state.id);
+	    },
+	    getDistanceToPlayer: function getDistanceToPlayer() {
+	        return (0, _algorithms.distance)({
+	            x: this.props.context.enemy.x,
+	            y: this.props.context.enemy.y
+	        }, {
+	            x: this.props.context.playerX,
+	            y: this.props.context.playerY
+	        });
+	    },
+	    move: function move(to) {
+	        this.props.context.enemy.x = to.x;
+	        this.props.context.enemy.y = to.y;
+	        (0, _events.emit)("rerender");
+	    },
+	    turn: function turn() {
+	        if (this.getDistanceToPlayer() > 1) {
+	            var path = _algorithms.AStar.calculatePath(this.props.context.map, {
+	                x: this.props.context.enemy.x,
+	                y: this.props.context.enemy.y
+	            }, {
+	                x: this.props.context.playerX,
+	                y: this.props.context.playerY
+	            });
+
+	            if (path && path.length >= 2) {
+	                this.move(path[1]);
+	            }
+	        } else {
+	            console.log('attack');
+	        }
+	    },
+
+	    mouseOver: function mouseOver() {
+	        this.setState({ anim: " animated pulse" });
+	    },
+
+	    mouseOut: function mouseOut() {
+	        this.setState({ anim: "" });
+	    },
+
+	    render: function render() {
+	        return React.createElement(
+	            "div",
+	            { className: "cell" },
+	            React.createElement("div", {
+	                onMouseOver: this.mouseOver,
+	                onMouseOut: this.mouseOut,
+	                className: "block zombie " + this.state.anim
 	            })
 	        );
 	    }

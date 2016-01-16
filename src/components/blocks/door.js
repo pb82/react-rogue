@@ -1,7 +1,7 @@
 "use strict";
 
 import { ID as DoorOpen } from "./doorOpen";
-import { distance } from "../vector";
+import { distance } from "../algorithms";
 import { emit } from "../events";
 
 export const ID = 3;

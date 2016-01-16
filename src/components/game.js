@@ -16,24 +16,35 @@ export default React.createClass({
         document.addEventListener("keydown", this.keyDown);
     },
 
+    componentWillUnmount() {
+        // Cleanup
+        document.removeEventListener("keydown", this.keyDown);
+    },
+
     componentDidMount() {
+        // Display a welcome message when the game is loaded
         emit("log", {text: "Good luck!", type: "normal"});
         emit("log", {text: "type `h`", type: "help"});
         emit("log", {text: "If you need help, ", type: "normal"});
         emit("log", {text: "Welcome to react-rogue!", type: "normal"});
     },
 
-    componentWillUnmount() {
-        document.removeEventListener("keydown", this.keyDown);
-    },
-
     help() {
+        // Ingame help
         emit("log", {text: "interacted with.", type: "help"});
         emit("log", {text: "Hover items to see if they can be", type: "help"});
         emit("log", {text: "the mouse to interact with things.", type: "help"});
         emit("log", {text: "Use cursor keys to move. Use", type: "help"});
     },
 
+    /**
+     * Move the player if the position could be advanced.
+     *
+     * @param axis The axis on which to move
+     * @param d The differental value
+     * @param text The text to display in the log of the
+     * movement was successful
+     */
     move(axis, d, text) {
         this.advance[axis](this.state.viewport, d, (err, viewport) => {
             if (!err) {
@@ -41,20 +52,29 @@ export default React.createClass({
                 this.setState({
                     viewport: viewport
                 });
+                emit("turn");
             } else {
                 emit("log", {text: "Oh no! The way is blocked!"});
+                emit("turn");
             }
         });
     },
 
+    /**
+     * Main interaction point. As the game is turn based, nothing will
+     * happen until a key is pressed.
+     *
+     * @param key Key code
+     * @returns {*} Nothing
+     */
     keyDown(key) {
         switch(key.keyCode) {
-            case 38: return this.move("y", -1, "North");
-            case 40: return this.move("y", 1, "South");
-            case 37: return this.move("x", -1, "West");
-            case 39: return this.move("x", 1, "East");
-            case 72: return this.help();
-            default: return null;
+            case 38: this.move("y", -1, "North"); break;
+            case 40: this.move("y", 1, "South"); break;
+            case 37: this.move("x", -1, "West"); break;
+            case 39: this.move("x", 1, "East"); break;
+            case 72: this.help(); break;
+            default: break;
         }
     },
 
@@ -66,22 +86,29 @@ export default React.createClass({
                 s: 9,
                 player: {
                     sight: 5
-                }
+                },
+                enemies: [
+                    {
+                        x: 10,
+                        y: 10,
+                        id: 998
+                    }
+                ]
             },
             map: [
-                [{t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}],
-                [{t: 1}, {t: 0}, {t: 0}, {t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 0}, {t: 0}, {t: 1}, {t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 3}, {t: 1}, {t: 1}, {t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 0}, {t: 1}, {t: 0}, {t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 0}, {t: 1}, {t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 1}, {t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 0}, {t: 1}],
-                [{t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}],
+                [{t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 3}, {t: 1}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 2}, {t: 2}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 1}, {t: 2}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 1}, {t: 2}],
+                [{t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}],
             ]
         }
     },

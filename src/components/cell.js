@@ -6,7 +6,8 @@ import {
     Wall,
     Off,
     Player,
-    Floor
+    Floor,
+    Zombie
 } from "./blocks/index";
 
 export default React.createClass({
@@ -22,6 +23,7 @@ export default React.createClass({
                             case Player.ID: return <Player.Player context={this.props.cell} parent={this} />;
                             case Door.ID: return <Door.Door context={this.props.cell} parent={this} />;
                             case DoorOpen.ID: return <DoorOpen.DoorOpen context={this.props.cell} parent={this} />;
+                            case Zombie.ID: return <Zombie.Zombie context={this.props.cell} parent={this} />;
                             default: return null;
                         }
                     })()
