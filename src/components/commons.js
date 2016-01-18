@@ -1,6 +1,7 @@
 "use strict";
 
-import { Zombie, Player, Off, accessible } from "./blocks/index"
+import { Zombie, Player, Off, accessible } from "./blocks/index";
+import { player, enemies } from "./globals";
 
 
 export default {
@@ -29,9 +30,9 @@ export default {
         return mask;
     },
 
-    isEnemyPosition(viewport, x, y) {
-        for (let i = 0; i < viewport.enemies.length; i++) {
-            let enemy = viewport.enemies[i];
+    isEnemyPosition(x, y) {
+        for (let i = 0; i < enemies.length; i++) {
+            let enemy = enemies[i];
             if (enemy.x === x && enemy.y === y) {
                 return enemy;
             }
@@ -61,7 +62,7 @@ export default {
         for (let x = fromX; x < (fromX + viewport.s); x++) {
             var row = [];
             for (let y = fromY; y < (fromY + viewport.s); y++) {
-                var enemy = this.isEnemyPosition(viewport, x, y);
+                var enemy = this.isEnemyPosition(x, y);
                 if (enemy) {
                     row.push({
                         t: enemy.id,
@@ -87,7 +88,6 @@ export default {
                     block.visible = false;
                     block.playerX = viewport.x;
                     block.playerY = viewport.y;
-                    block.player = viewport.player;
                     block.map = map;
                     row.push(block);
                 } else {
@@ -99,10 +99,9 @@ export default {
         }
 
         // Hide blocks that are not in sight
-        // var mask = this.getMask(viewport.s);
-        // this.expand(region, mask, center, center, viewport.player.sight);
-        // return mask;
-        return region;
+        var mask = this.getMask(viewport.s);
+        this.expand(region, mask, center, center, player.sight);
+        return mask;
     },
 
     /**
@@ -155,7 +154,7 @@ export default {
         if (axis === "x") {
             // advance on X axis
             return function (viewport, dx, callback) {
-                if (that.isEnemyPosition(viewport, viewport.x+dx, viewport.y)) {
+                if (that.isEnemyPosition(viewport.x+dx, viewport.y)) {
                     return callback(true, viewport);
                 }
 
@@ -169,7 +168,7 @@ export default {
         } else {
             // Advance on Y axis
             return function (viewport, dy, callback) {
-                if (that.isEnemyPosition(viewport, viewport.x, viewport.y+dy)) {
+                if (that.isEnemyPosition(viewport.x, viewport.y+dy)) {
                     return callback(true, viewport);
                 }
 

@@ -83,17 +83,7 @@ export default React.createClass({
             viewport: {
                 x: 1,
                 y: 1,
-                s: 9,
-                player: {
-                    sight: 5
-                },
-                enemies: [
-                    {
-                        x: 10,
-                        y: 10,
-                        id: 998
-                    }
-                ]
+                s: 9
             },
             map: [
                 [{t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}, {t: 2}],

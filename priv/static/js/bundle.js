@@ -68,11 +68,11 @@
 
 	var _commons2 = _interopRequireDefault(_commons);
 
-	var _field = __webpack_require__(12);
+	var _field = __webpack_require__(14);
 
 	var _field2 = _interopRequireDefault(_field);
 
-	var _console = __webpack_require__(15);
+	var _console = __webpack_require__(17);
 
 	var _console2 = _interopRequireDefault(_console);
 
@@ -162,15 +162,7 @@
 	            viewport: {
 	                x: 1,
 	                y: 1,
-	                s: 9,
-	                player: {
-	                    sight: 5
-	                },
-	                enemies: [{
-	                    x: 10,
-	                    y: 10,
-	                    id: 998
-	                }]
+	                s: 9
 	            },
 	            map: [[{ t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 3 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 1 }, { t: 2 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 1 }, { t: 2 }], [{ t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }, { t: 2 }]]
 	        };
@@ -196,6 +188,8 @@
 	});
 
 	var _index = __webpack_require__(3);
+
+	var _globals = __webpack_require__(13);
 
 	exports.default = {
 	    /**
@@ -223,9 +217,9 @@
 	        }
 	        return mask;
 	    },
-	    isEnemyPosition: function isEnemyPosition(viewport, x, y) {
-	        for (var i = 0; i < viewport.enemies.length; i++) {
-	            var enemy = viewport.enemies[i];
+	    isEnemyPosition: function isEnemyPosition(x, y) {
+	        for (var i = 0; i < _globals.enemies.length; i++) {
+	            var enemy = _globals.enemies[i];
 	            if (enemy.x === x && enemy.y === y) {
 	                return enemy;
 	            }
@@ -255,7 +249,7 @@
 	        for (var x = fromX; x < fromX + viewport.s; x++) {
 	            var row = [];
 	            for (var y = fromY; y < fromY + viewport.s; y++) {
-	                var enemy = this.isEnemyPosition(viewport, x, y);
+	                var enemy = this.isEnemyPosition(x, y);
 	                if (enemy) {
 	                    row.push({
 	                        t: enemy.id,
@@ -281,7 +275,6 @@
 	                    block.visible = false;
 	                    block.playerX = viewport.x;
 	                    block.playerY = viewport.y;
-	                    block.player = viewport.player;
 	                    block.map = map;
 	                    row.push(block);
 	                } else {
@@ -293,10 +286,9 @@
 	        }
 
 	        // Hide blocks that are not in sight
-	        // var mask = this.getMask(viewport.s);
-	        // this.expand(region, mask, center, center, viewport.player.sight);
-	        // return mask;
-	        return region;
+	        var mask = this.getMask(viewport.s);
+	        this.expand(region, mask, center, center, _globals.player.sight);
+	        return mask;
 	    },
 
 	    /**
@@ -349,7 +341,7 @@
 	        if (axis === "x") {
 	            // advance on X axis
 	            return function (viewport, dx, callback) {
-	                if (that.isEnemyPosition(viewport, viewport.x + dx, viewport.y)) {
+	                if (that.isEnemyPosition(viewport.x + dx, viewport.y)) {
 	                    return callback(true, viewport);
 	                }
 
@@ -363,7 +355,7 @@
 	        } else {
 	            // Advance on Y axis
 	            return function (viewport, dy, callback) {
-	                if (that.isEnemyPosition(viewport, viewport.x, viewport.y + dy)) {
+	                if (that.isEnemyPosition(viewport.x, viewport.y + dy)) {
 	                    return callback(true, viewport);
 	                }
 
@@ -414,7 +406,7 @@
 
 	var _Player = _interopRequireWildcard(_player);
 
-	var _zombie = __webpack_require__(17);
+	var _zombie = __webpack_require__(12);
 
 	var _Zombie = _interopRequireWildcard(_zombie);
 
@@ -462,7 +454,7 @@
 
 	var _doorOpen = __webpack_require__(5);
 
-	var _algorithms = __webpack_require__(16);
+	var _algorithms = __webpack_require__(6);
 
 	var _events = __webpack_require__(7);
 
@@ -529,7 +521,7 @@
 
 	var _door = __webpack_require__(4);
 
-	var _algorithms = __webpack_require__(16);
+	var _algorithms = __webpack_require__(6);
 
 	var _events = __webpack_require__(7);
 
@@ -584,333 +576,7 @@
 	});
 
 /***/ },
-/* 6 */,
-/* 7 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.on = on;
-	exports.off = off;
-	exports.emit = emit;
-	var events = {};
-
-	function on(event, receiver, callback) {
-	    if (!events[event]) {
-	        events[event] = {};
-	    }
-
-	    events[event][receiver] = callback;
-	};
-
-	function off(event, receiver) {
-	    if (events[event]) {
-	        delete events[event][receiver];
-	    }
-	};
-
-	function emit(event, data) {
-	    if (events[event]) {
-	        for (var prop in events[event]) {
-	            if (!events[event].hasOwnProperty(prop)) {
-	                continue;
-	            } else {
-	                events[event][prop](data);
-	            }
-	        }
-	    }
-	}
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var ID = exports.ID = 2;
-
-	var ACCESSIBLE = exports.ACCESSIBLE = false;
-
-	var Wall = exports.Wall = React.createClass({
-	    displayName: "Wall",
-	    render: function render() {
-	        var cssClass = this.props.context.type || "wall";
-
-	        return React.createElement(
-	            "div",
-	            { className: "cell" },
-	            React.createElement("div", { className: "block " + cssClass })
-	        );
-	    }
-	});
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var ID = exports.ID = 1;
-
-	var ACCESSIBLE = exports.ACCESSIBLE = true;
-
-	var Floor = exports.Floor = React.createClass({
-	    displayName: "Floor",
-	    render: function render() {
-	        var cssClass = this.props.context.type || "";
-	        return React.createElement(
-	            "div",
-	            { className: "cell" },
-	            React.createElement("div", { className: "block floor " + cssClass })
-	        );
-	    }
-	});
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var ID = exports.ID = 0;
-
-	var ACCESSIBLE = exports.ACCESSIBLE = false;
-
-	var Off = exports.Off = React.createClass({
-	    displayName: "Off",
-	    render: function render() {
-	        return React.createElement(
-	            "div",
-	            { className: "cell" },
-	            React.createElement("div", { className: "block off" })
-	        );
-	    }
-	});
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var ID = exports.ID = 999;
-
-	var ACCESSIBLE = exports.ACCESSIBLE = true;
-
-	var Player = exports.Player = React.createClass({
-	    displayName: "Player",
-	    render: function render() {
-	        return React.createElement(
-	            "div",
-	            { className: "cell" },
-	            React.createElement("div", { className: "block player" })
-	        );
-	    }
-	});
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _commons = __webpack_require__(2);
-
-	var _commons2 = _interopRequireDefault(_commons);
-
-	var _column = __webpack_require__(13);
-
-	var _column2 = _interopRequireDefault(_column);
-
-	var _events = __webpack_require__(7);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = React.createClass({
-	    displayName: "field",
-	    componentDidMount: function componentDidMount() {
-	        var _this = this;
-
-	        (0, _events.on)("rerender", "field", function () {
-	            _this.forceUpdate();
-	        });
-	    },
-	    render: function render() {
-	        var viewport = _commons2.default.cropToViewport(this.props.viewport, this.props.map);
-
-	        return React.createElement(
-	            "div",
-	            { className: "field" },
-	            viewport.map(function (column, index) {
-	                return React.createElement(_column2.default, {
-	                    column: column,
-	                    index: index,
-	                    key: index
-	                });
-	            })
-	        );
-	    }
-	});
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _cell = __webpack_require__(14);
-
-	var _cell2 = _interopRequireDefault(_cell);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = React.createClass({
-	    displayName: "column",
-	    render: function render() {
-	        return React.createElement(
-	            "div",
-	            { className: "column" },
-	            this.props.column.map(function (cell, index) {
-	                return React.createElement(_cell2.default, { key: index, cell: cell });
-	            })
-	        );
-	    }
-	});
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _index = __webpack_require__(3);
-
-	exports.default = React.createClass({
-	    displayName: "cell",
-	    render: function render() {
-	        var _this = this;
-
-	        return React.createElement(
-	            "div",
-	            { className: "cell" },
-	            (function () {
-	                switch (_this.props.cell.t) {
-	                    case _index.Off.ID:
-	                        return React.createElement(_index.Off.Off, { context: _this.props.cell, parent: _this });
-	                    case _index.Floor.ID:
-	                        return React.createElement(_index.Floor.Floor, { context: _this.props.cell, parent: _this });
-	                    case _index.Wall.ID:
-	                        return React.createElement(_index.Wall.Wall, { context: _this.props.cell, parent: _this });
-	                    case _index.Player.ID:
-	                        return React.createElement(_index.Player.Player, { context: _this.props.cell, parent: _this });
-	                    case _index.Door.ID:
-	                        return React.createElement(_index.Door.Door, { context: _this.props.cell, parent: _this });
-	                    case _index.DoorOpen.ID:
-	                        return React.createElement(_index.DoorOpen.DoorOpen, { context: _this.props.cell, parent: _this });
-	                    case _index.Zombie.ID:
-	                        return React.createElement(_index.Zombie.Zombie, { context: _this.props.cell, parent: _this });
-	                    default:
-	                        return null;
-	                }
-	            })()
-	        );
-	    }
-	});
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _events = __webpack_require__(7);
-
-	var LOG_SIZE = 4;
-
-	exports.default = React.createClass({
-	    displayName: "console",
-	    getInitialState: function getInitialState() {
-	        return {
-	            count: 0,
-	            messages: []
-	        };
-	    },
-	    componentDidMount: function componentDidMount() {
-	        (0, _events.on)("log", "console", this.log);
-	    },
-	    log: function log(data) {
-	        this.state.messages.push(data);
-	        this.state.count++;
-
-	        this.setState({
-	            messages: this.state.messages.slice(-LOG_SIZE)
-	        });
-	    },
-	    render: function render() {
-	        var _this = this;
-
-	        var messages = [];
-	        this.state.messages.forEach(function (message) {
-	            messages.push(message);
-	        });
-	        messages.reverse();
-
-	        return React.createElement(
-	            "div",
-	            { className: "console" },
-	            messages.map(function (message, index) {
-	                return React.createElement(
-	                    "div",
-	                    null,
-	                    React.createElement(
-	                        "span",
-	                        { className: "prompt" },
-	                        "(" + (_this.state.count - index) + ")>"
-	                    ),
-	                    React.createElement(
-	                        "span",
-	                        { className: message.type },
-	                        message.text
-	                    )
-	                );
-	            })
-	        );
-	    }
-	});
-
-/***/ },
-/* 16 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1121,7 +787,146 @@
 	var AStar = exports.AStar = new _AStar();
 
 /***/ },
-/* 17 */
+/* 7 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.on = on;
+	exports.off = off;
+	exports.emit = emit;
+	var events = {};
+
+	function on(event, receiver, callback) {
+	    if (!events[event]) {
+	        events[event] = {};
+	    }
+
+	    events[event][receiver] = callback;
+	};
+
+	function off(event, receiver) {
+	    if (events[event]) {
+	        delete events[event][receiver];
+	    }
+	};
+
+	function emit(event, data) {
+	    if (events[event]) {
+	        for (var prop in events[event]) {
+	            if (!events[event].hasOwnProperty(prop)) {
+	                continue;
+	            } else {
+	                events[event][prop](data);
+	            }
+	        }
+	    }
+	}
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var ID = exports.ID = 2;
+
+	var ACCESSIBLE = exports.ACCESSIBLE = false;
+
+	var Wall = exports.Wall = React.createClass({
+	    displayName: "Wall",
+	    render: function render() {
+	        var cssClass = this.props.context.type || "wall";
+
+	        return React.createElement(
+	            "div",
+	            { className: "cell" },
+	            React.createElement("div", { className: "block " + cssClass })
+	        );
+	    }
+	});
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var ID = exports.ID = 1;
+
+	var ACCESSIBLE = exports.ACCESSIBLE = true;
+
+	var Floor = exports.Floor = React.createClass({
+	    displayName: "Floor",
+	    render: function render() {
+	        var cssClass = this.props.context.type || "";
+	        return React.createElement(
+	            "div",
+	            { className: "cell" },
+	            React.createElement("div", { className: "block floor " + cssClass })
+	        );
+	    }
+	});
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var ID = exports.ID = 0;
+
+	var ACCESSIBLE = exports.ACCESSIBLE = false;
+
+	var Off = exports.Off = React.createClass({
+	    displayName: "Off",
+	    render: function render() {
+	        return React.createElement(
+	            "div",
+	            { className: "cell" },
+	            React.createElement("div", { className: "block off" })
+	        );
+	    }
+	});
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var ID = exports.ID = 999;
+
+	var ACCESSIBLE = exports.ACCESSIBLE = true;
+
+	var Player = exports.Player = React.createClass({
+	    displayName: "Player",
+	    render: function render() {
+	        return React.createElement(
+	            "div",
+	            { className: "cell" },
+	            React.createElement("div", { className: "block player" })
+	        );
+	    }
+	});
+
+/***/ },
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1135,7 +940,7 @@
 
 	var _index = __webpack_require__(3);
 
-	var _algorithms = __webpack_require__(16);
+	var _algorithms = __webpack_require__(6);
 
 	var ID = exports.ID = 998;
 
@@ -1202,6 +1007,211 @@
 	                onMouseOver: this.mouseOver,
 	                onMouseOut: this.mouseOut,
 	                className: "block zombie " + this.state.anim
+	            })
+	        );
+	    }
+	});
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var player = exports.player = {
+	    sight: 5
+	};
+
+	var enemies = exports.enemies = [{
+	    x: 10,
+	    y: 10,
+	    id: 998
+	}];
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _commons = __webpack_require__(2);
+
+	var _commons2 = _interopRequireDefault(_commons);
+
+	var _column = __webpack_require__(15);
+
+	var _column2 = _interopRequireDefault(_column);
+
+	var _events = __webpack_require__(7);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = React.createClass({
+	    displayName: "field",
+	    componentDidMount: function componentDidMount() {
+	        var _this = this;
+
+	        (0, _events.on)("rerender", "field", function () {
+	            _this.forceUpdate();
+	        });
+	    },
+	    render: function render() {
+	        var viewport = _commons2.default.cropToViewport(this.props.viewport, this.props.map);
+
+	        return React.createElement(
+	            "div",
+	            { className: "field" },
+	            viewport.map(function (column, index) {
+	                return React.createElement(_column2.default, {
+	                    column: column,
+	                    index: index,
+	                    key: index
+	                });
+	            })
+	        );
+	    }
+	});
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _cell = __webpack_require__(16);
+
+	var _cell2 = _interopRequireDefault(_cell);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = React.createClass({
+	    displayName: "column",
+	    render: function render() {
+	        return React.createElement(
+	            "div",
+	            { className: "column" },
+	            this.props.column.map(function (cell, index) {
+	                return React.createElement(_cell2.default, { key: index, cell: cell });
+	            })
+	        );
+	    }
+	});
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _index = __webpack_require__(3);
+
+	exports.default = React.createClass({
+	    displayName: "cell",
+	    render: function render() {
+	        var _this = this;
+
+	        return React.createElement(
+	            "div",
+	            { className: "cell" },
+	            (function () {
+	                switch (_this.props.cell.t) {
+	                    case _index.Off.ID:
+	                        return React.createElement(_index.Off.Off, { context: _this.props.cell, parent: _this });
+	                    case _index.Floor.ID:
+	                        return React.createElement(_index.Floor.Floor, { context: _this.props.cell, parent: _this });
+	                    case _index.Wall.ID:
+	                        return React.createElement(_index.Wall.Wall, { context: _this.props.cell, parent: _this });
+	                    case _index.Player.ID:
+	                        return React.createElement(_index.Player.Player, { context: _this.props.cell, parent: _this });
+	                    case _index.Door.ID:
+	                        return React.createElement(_index.Door.Door, { context: _this.props.cell, parent: _this });
+	                    case _index.DoorOpen.ID:
+	                        return React.createElement(_index.DoorOpen.DoorOpen, { context: _this.props.cell, parent: _this });
+	                    case _index.Zombie.ID:
+	                        return React.createElement(_index.Zombie.Zombie, { context: _this.props.cell, parent: _this });
+	                    default:
+	                        return null;
+	                }
+	            })()
+	        );
+	    }
+	});
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _events = __webpack_require__(7);
+
+	var LOG_SIZE = 4;
+
+	exports.default = React.createClass({
+	    displayName: "console",
+	    getInitialState: function getInitialState() {
+	        return {
+	            count: 0,
+	            messages: []
+	        };
+	    },
+	    componentDidMount: function componentDidMount() {
+	        (0, _events.on)("log", "console", this.log);
+	    },
+	    log: function log(data) {
+	        this.state.messages.push(data);
+	        this.state.count++;
+
+	        this.setState({
+	            messages: this.state.messages.slice(-LOG_SIZE)
+	        });
+	    },
+	    render: function render() {
+	        var _this = this;
+
+	        var messages = [];
+	        this.state.messages.forEach(function (message) {
+	            messages.push(message);
+	        });
+	        messages.reverse();
+
+	        return React.createElement(
+	            "div",
+	            { className: "console" },
+	            messages.map(function (message, index) {
+	                return React.createElement(
+	                    "div",
+	                    null,
+	                    React.createElement(
+	                        "span",
+	                        { className: "prompt" },
+	                        "(" + (_this.state.count - index) + ")>"
+	                    ),
+	                    React.createElement(
+	                        "span",
+	                        { className: message.type },
+	                        message.text
+	                    )
+	                );
 	            })
 	        );
 	    }
