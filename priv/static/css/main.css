@@ -93,12 +93,10 @@ div.block {
 }
 
 .door:hover, .doorOpen:hover {
-    cursor: move;
     border: 1px solid blue;
 }
 
 .zombie:hover {
-    cursor: crosshair;
     border: 1px solid red;
 }
 

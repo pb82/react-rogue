@@ -1,8 +1,6 @@
 "use strict";
 
 import { Zombie, Player, Off, accessible } from "./blocks/index";
-import { player, enemies } from "./globals";
-
 
 export default {
     /**
@@ -30,7 +28,7 @@ export default {
         return mask;
     },
 
-    isEnemyPosition(x, y) {
+    isEnemyPosition(x, y, enemies) {
         for (let i = 0; i < enemies.length; i++) {
             let enemy = enemies[i];
             if (enemy.x === x && enemy.y === y) {
@@ -48,21 +46,21 @@ export default {
      * @param viewport The current viweport (x, y, s)
      * @param map (The complete map of the level)
      */
-    cropToViewport(viewport, map) {
+    cropToViewport(viewport, map, player, enemies) {
         // The array containing the cropped region
-        var region = [];
+        let region = [];
 
         // Always rectangular, so x and y are the same
-        var center = Math.floor(viewport.s / 2);
+        let center = Math.floor(viewport.s / 2);
 
         // Where to start cropping
-        var fromX = viewport.x - center;
-        var fromY = viewport.y - center;
+        let fromX = viewport.x - center;
+        let fromY = viewport.y - center;
 
         for (let x = fromX; x < (fromX + viewport.s); x++) {
             var row = [];
             for (let y = fromY; y < (fromY + viewport.s); y++) {
-                var enemy = this.isEnemyPosition(x, y);
+                var enemy = this.isEnemyPosition(x, y, enemies);
                 if (enemy) {
                     row.push({
                         t: enemy.id,
@@ -153,8 +151,8 @@ export default {
 
         if (axis === "x") {
             // advance on X axis
-            return function (viewport, dx, callback) {
-                if (that.isEnemyPosition(viewport.x+dx, viewport.y)) {
+            return function (viewport, dx, enemies, callback) {
+                if (that.isEnemyPosition(viewport.x+dx, viewport.y, enemies)) {
                     return callback(true, viewport);
                 }
 
@@ -167,8 +165,8 @@ export default {
             }
         } else {
             // Advance on Y axis
-            return function (viewport, dy, callback) {
-                if (that.isEnemyPosition(viewport.x, viewport.y+dy)) {
+            return function (viewport, dy, enemies, callback) {
+                if (that.isEnemyPosition(viewport.x, viewport.y+dy, enemies)) {
                     return callback(true, viewport);
                 }
 

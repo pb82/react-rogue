@@ -1,15 +1,13 @@
 "use strict";
 
+import * as React from "react";
+
 export const ID = 0;
 
 export const ACCESSIBLE = false;
 
-export var Off = React.createClass({
-    render() {
-        return (
-            <div className="cell">
-                <div className={"block off"}></div>
-            </div>
-        );
-    }
-});
+export const Off = () => {
+    return <div className="cell">
+        <div className={"block off"}></div>
+    </div>
+};

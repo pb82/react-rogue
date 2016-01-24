@@ -1,5 +1,6 @@
 "use strict";
 
+import * as React from "react";
 import { ID as DoorOpen } from "./doorOpen";
 import { distance } from "../algorithms";
 import { emit } from "../events";

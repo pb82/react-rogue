@@ -1,5 +1,4 @@
 import { accessible } from "./blocks/index";
-import { emit } from "./events";
 
 /**
  * The distance between two positions in 2-dimensional space
@@ -55,7 +54,7 @@ export class PriorityQueue {
  * An implementation of the A* algorithm for finding the
  * optimal path between two points (if there is one)
  */
-class _AStar {
+export const AStar = new class {
     constructor() {
         this.frontier = new PriorityQueue();
     }
@@ -78,6 +77,15 @@ class _AStar {
         return result;
     }
 
+    /**
+     * Reconstruct the optimal path form the linked list of nodes that
+     * the A* returned
+     *
+     * @param map The complete map (only required for node hashing)
+     * @param cameFrom Structure that holds the list of nodes from goal to start
+     * @param start Start node
+     * @param goal The goal (from start)
+     */
     replayPath(map, cameFrom, start, goal) {
         var current = goal;
         var path = [current];
@@ -142,5 +150,3 @@ class _AStar {
         }
     }
 };
-
-export var AStar = new _AStar();

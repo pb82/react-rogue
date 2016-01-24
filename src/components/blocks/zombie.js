@@ -1,5 +1,6 @@
 "use strict";
 
+import * as React from "react";
 import { on, off, emit } from "../events";
 import { Floor } from "./index";
 import { AStar, distance } from "../algorithms";
@@ -8,7 +9,7 @@ export const ID = 998;
 
 export const ACCESSIBLE = false;
 
-export var Zombie = React.createClass({
+export const Zombie = React.createClass({
     getInitialState() {
         return {
             id: Math.floor(Math.random() * 1000000) + ''

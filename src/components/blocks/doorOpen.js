@@ -2,6 +2,7 @@
 
 export const ID = 4;
 
+import * as React from "react";
 import { ID as Door } from "./door";
 import { distance } from "../algorithms";
 import { emit } from "../events";
