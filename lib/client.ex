@@ -18,7 +18,7 @@ defmodule Router do
     |> put_resp_header("Pragma", "no-cache")
     |> put_resp_header("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")
     |> put_resp_content_type("text/html")
-    |> send_resp(200, @index)
+    |> send_resp(200, File.read! "priv/static/index.html")
   end
 
   match _ do

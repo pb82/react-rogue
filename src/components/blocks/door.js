@@ -1,54 +1,44 @@
 "use strict";
 
 import * as React from "react";
-import { ID as DoorOpen } from "./doorOpen";
 import { distance } from "../algorithms";
-import { emit } from "../events";
+import Pulse from "../mixins/pulse";
+import { dispatch } from "../../flux/store";
 
 export const ID = 3;
 
 export const ACCESSIBLE = false;
 
-export var Door = React.createClass({
-    getInitialState() {
-        return {
-            anim: ""
-        };
-    },
+export const Door = React.createClass({
+    mixins: [Pulse],
 
     mouseDown: function () {
-        if(distance({
-            x: this.props.context.blockX,
-            y: this.props.context.blockY
-        }, {
-            x: this.props.context.playerX,
-            y: this.props.context.playerY
+        let x = this.props.context.blockX;
+        let y = this.props.context.blockY;
+
+        let pX = this.props.context.playerX;
+        let pY = this.props.context.playerY;
+
+        if(distance({x, y}, {
+            x: pX,
+            y: pY
         }) <= 1) {
-            // A click Opens the door
-            this.props.context.t = DoorOpen;
-            emit("log", {text: "The old door opens barely...", type: "normal"});
-            emit("rerender");
+            dispatch({type: "TOGGLE_DOOR", x, y});
         } else {
-            emit("log", {text: "Too far away to open it", type: "normal"});
+            dispatch({type: "LOG", text: "Too far away to open it", style: "normal"});
         }
     },
 
-    mouseOver: function () {
-        this.setState({anim: " animated pulse"});
-    },
-
-    mouseOut: function () {
-        this.setState({anim: ""});
-    },
-
     render() {
+        let cssClass = this.props.context.a ? "doorOpen" : "door";
+
         return (
             <div className="cell">
                 <div
                     onMouseDown={this.mouseDown}
                     onMouseOver={this.mouseOver}
                     onMouseOut={this.mouseOut}
-                    className={"block door" + this.state.anim}></div>
+                    className={`block ${cssClass} ${this.state.anim}`}></div>
             </div>
         );
     }

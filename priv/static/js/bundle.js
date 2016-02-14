@@ -19677,19 +19677,19 @@
 
 	var _commons2 = _interopRequireDefault(_commons);
 
-	var _field = __webpack_require__(172);
+	var _field = __webpack_require__(185);
 
 	var _field2 = _interopRequireDefault(_field);
 
-	var _console = __webpack_require__(175);
+	var _console = __webpack_require__(188);
 
 	var _console2 = _interopRequireDefault(_console);
 
-	var _controls = __webpack_require__(190);
+	var _controls = __webpack_require__(189);
 
 	var _controls2 = _interopRequireDefault(_controls);
 
-	var _store = __webpack_require__(176);
+	var _store = __webpack_require__(166);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19725,16 +19725,13 @@
 
 /***/ },
 /* 160 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	var _index = __webpack_require__(161);
-
 	exports.default = {
 	    /**
 	     * Return a mask that is used to expand the field
@@ -19755,7 +19752,7 @@
 	        for (var x = 0; x < s; x++) {
 	            var row = [];
 	            for (var y = 0; y < s; y++) {
-	                row.push({ t: _index.Off.ID });
+	                row.push({ t: 0 });
 	            }
 	            mask.push(row);
 	        }
@@ -19797,6 +19794,7 @@
 	                if (enemy) {
 	                    row.push({
 	                        t: enemy.id,
+	                        a: false,
 	                        enemy: enemy,
 	                        playerX: viewport.x,
 	                        playerY: viewport.y,
@@ -19804,11 +19802,11 @@
 	                    });
 	                } else if (x === viewport.x && y === viewport.y) {
 	                    // The players position: draw player sprite
-	                    row.push({ t: _index.Player.ID });
+	                    row.push({ t: 999, a: true });
 	                    continue;
 	                } else if (y < 0 || x < 0) {
 	                    // Out of bounds (too small)
-	                    row.push({ t: _index.Off.ID, visible: false });
+	                    row.push({ t: 0, visible: false, a: false });
 	                } else if (map[y] && map[y][x]) {
 	                    // Current position is valid and inside the map
 	                    var block = map[y][x];
@@ -19823,7 +19821,7 @@
 	                    row.push(block);
 	                } else {
 	                    // Out of bounds (too large)
-	                    row.push({ t: _index.Off.ID, visible: false });
+	                    row.push({ t: 0, visible: false });
 	                }
 	            }
 	            region.push(row);
@@ -19860,7 +19858,7 @@
 	        r[y][x].visible = true;
 
 	        // Expand recursively on accessible neighbours
-	        if (r[y] && r[y][x] && (0, _index.accessible)(r[y][x])) {
+	        if (r[y] && r[y][x] && r[y][x].a) {
 	            this.expand(r, m, x + 1, y, c - 1);
 	            this.expand(r, m, x, y + 1, c - 1);
 	            this.expand(r, m, x, y - 1, c - 1);
@@ -19889,7 +19887,7 @@
 	                    return callback(true, viewport);
 	                }
 
-	                if ((0, _index.accessible)(map[viewport.y][viewport.x + dx])) {
+	                if (map[viewport.y][viewport.x + dx].a) {
 	                    viewport.x += dx;
 	                    return callback(null, viewport);
 	                } else {
@@ -19903,7 +19901,7 @@
 	                    return callback(true, viewport);
 	                }
 
-	                if ((0, _index.accessible)(map[viewport.y + dy][viewport.x])) {
+	                if (map[viewport.y + dy][viewport.x].a) {
 	                    viewport.y += dy;
 	                    return callback(null, viewport);
 	                } else {
@@ -19923,41 +19921,36 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Zombie = exports.Off = exports.Player = exports.Floor = exports.Wall = exports.DoorOpen = exports.Door = undefined;
+	exports.Zombie = exports.Off = exports.Player = exports.Floor = exports.Wall = exports.Door = undefined;
 	exports.accessible = accessible;
 
 	var _door = __webpack_require__(162);
 
 	var _Door = _interopRequireWildcard(_door);
 
-	var _doorOpen = __webpack_require__(163);
-
-	var _DoorOpen = _interopRequireWildcard(_doorOpen);
-
-	var _wall = __webpack_require__(166);
+	var _wall = __webpack_require__(180);
 
 	var _Wall = _interopRequireWildcard(_wall);
 
-	var _floor = __webpack_require__(167);
+	var _floor = __webpack_require__(181);
 
 	var _Floor = _interopRequireWildcard(_floor);
 
-	var _off = __webpack_require__(168);
+	var _off = __webpack_require__(182);
 
 	var _Off = _interopRequireWildcard(_off);
 
-	var _player = __webpack_require__(169);
+	var _player = __webpack_require__(183);
 
 	var _Player = _interopRequireWildcard(_player);
 
-	var _zombie = __webpack_require__(170);
+	var _zombie = __webpack_require__(184);
 
 	var _Zombie = _interopRequireWildcard(_zombie);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	var Door = exports.Door = _Door;
-	var DoorOpen = exports.DoorOpen = _DoorOpen;
 	var Wall = exports.Wall = _Wall;
 	var Floor = exports.Floor = _Floor;
 	var Player = exports.Player = _Player;
@@ -19968,8 +19961,6 @@
 	    switch (block.t) {
 	        case _Door.ID:
 	            return _Door.ACCESSIBLE;
-	        case _DoorOpen.ID:
-	            return _DoorOpen.ACCESSIBLE;
 	        case _Wall.ID:
 	            return _Wall.ACCESSIBLE;
 	        case _Floor.ID:
@@ -20000,11 +19991,15 @@
 
 	var React = _interopRequireWildcard(_react);
 
-	var _doorOpen = __webpack_require__(163);
+	var _algorithms = __webpack_require__(163);
 
-	var _algorithms = __webpack_require__(164);
+	var _pulse = __webpack_require__(165);
 
-	var _events = __webpack_require__(165);
+	var _pulse2 = _interopRequireDefault(_pulse);
+
+	var _store = __webpack_require__(166);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -20014,38 +20009,29 @@
 
 	var Door = exports.Door = React.createClass({
 	    displayName: "Door",
-	    getInitialState: function getInitialState() {
-	        return {
-	            anim: ""
-	        };
-	    },
+
+	    mixins: [_pulse2.default],
 
 	    mouseDown: function mouseDown() {
-	        if ((0, _algorithms.distance)({
-	            x: this.props.context.blockX,
-	            y: this.props.context.blockY
-	        }, {
-	            x: this.props.context.playerX,
-	            y: this.props.context.playerY
+	        var x = this.props.context.blockX;
+	        var y = this.props.context.blockY;
+
+	        var pX = this.props.context.playerX;
+	        var pY = this.props.context.playerY;
+
+	        if ((0, _algorithms.distance)({ x: x, y: y }, {
+	            x: pX,
+	            y: pY
 	        }) <= 1) {
-	            // A click Opens the door
-	            this.props.context.t = _doorOpen.ID;
-	            (0, _events.emit)("log", { text: "The old door opens barely...", type: "normal" });
-	            (0, _events.emit)("rerender");
+	            (0, _store.dispatch)({ type: "TOGGLE_DOOR", x: x, y: y });
 	        } else {
-	            (0, _events.emit)("log", { text: "Too far away to open it", type: "normal" });
+	            (0, _store.dispatch)({ type: "LOG", text: "Too far away to open it", style: "normal" });
 	        }
 	    },
 
-	    mouseOver: function mouseOver() {
-	        this.setState({ anim: " animated pulse" });
-	    },
-
-	    mouseOut: function mouseOut() {
-	        this.setState({ anim: "" });
-	    },
-
 	    render: function render() {
+	        var cssClass = this.props.context.a ? "doorOpen" : "door";
+
 	        return React.createElement(
 	            "div",
 	            { className: "cell" },
@@ -20053,86 +20039,13 @@
 	                onMouseDown: this.mouseDown,
 	                onMouseOver: this.mouseOver,
 	                onMouseOut: this.mouseOut,
-	                className: "block door" + this.state.anim })
+	                className: "block " + cssClass + " " + this.state.anim })
 	        );
 	    }
 	});
 
 /***/ },
 /* 163 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.DoorOpen = exports.ACCESSIBLE = exports.ID = undefined;
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	var _door = __webpack_require__(162);
-
-	var _algorithms = __webpack_require__(164);
-
-	var _events = __webpack_require__(165);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	var ID = exports.ID = 4;
-
-	var ACCESSIBLE = exports.ACCESSIBLE = true;
-
-	var DoorOpen = exports.DoorOpen = React.createClass({
-	    displayName: "DoorOpen",
-	    getInitialState: function getInitialState() {
-	        return {
-	            anim: ""
-	        };
-	    },
-
-	    mouseDown: function mouseDown() {
-	        if ((0, _algorithms.distance)({
-	            x: this.props.context.blockX,
-	            y: this.props.context.blockY
-	        }, {
-	            x: this.props.context.playerX,
-	            y: this.props.context.playerY
-	        }) <= 1) {
-	            // A click closes the door
-	            this.props.context.t = _door.ID;
-	            (0, _events.emit)("log", { text: "You manage to close the door", type: "normal" });
-	            (0, _events.emit)("rerender");
-	        } else {
-	            (0, _events.emit)("log", { text: "Too far away to close it", type: "normal" });
-	        }
-	    },
-
-	    mouseOver: function mouseOver() {
-	        this.setState({ anim: " animated pulse" });
-	    },
-
-	    mouseOut: function mouseOut() {
-	        this.setState({ anim: "" });
-	    },
-
-	    render: function render() {
-	        return React.createElement(
-	            "div",
-	            { className: "cell" },
-	            React.createElement("div", {
-	                onMouseDown: this.mouseDown,
-	                onMouseOver: this.mouseOver,
-	                onMouseOut: this.mouseOut,
-	                className: "block doorOpen" + this.state.anim })
-	        );
-	    }
-	});
-
-/***/ },
-/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20347,7 +20260,7 @@
 	}())();
 
 /***/ },
-/* 165 */
+/* 164 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20387,195 +20300,19 @@
 	}
 
 /***/ },
-/* 166 */
-/***/ function(module, exports, __webpack_require__) {
+/* 165 */
+/***/ function(module, exports) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Wall = exports.ACCESSIBLE = exports.ID = undefined;
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	var ID = exports.ID = 2;
-
-	var ACCESSIBLE = exports.ACCESSIBLE = false;
-
-	var Wall = exports.Wall = function Wall(_ref) {
-	    var context = _ref.context;
-
-	    return React.createElement(
-	        "div",
-	        { className: "cell" },
-	        React.createElement("div", { className: "block " + (context.type || "wall") })
-	    );
-	};
-
-/***/ },
-/* 167 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Floor = exports.ACCESSIBLE = exports.ID = undefined;
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	var ID = exports.ID = 1;
-
-	var ACCESSIBLE = exports.ACCESSIBLE = true;
-
-	var Floor = exports.Floor = function Floor(_ref) {
-	    var context = _ref.context;
-
-	    return React.createElement(
-	        "div",
-	        { className: "cell" },
-	        React.createElement("div", { className: "block floor " + context.type })
-	    );
-	};
-
-/***/ },
-/* 168 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Off = exports.ACCESSIBLE = exports.ID = undefined;
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	var ID = exports.ID = 0;
-
-	var ACCESSIBLE = exports.ACCESSIBLE = false;
-
-	var Off = exports.Off = function Off() {
-	    return React.createElement(
-	        "div",
-	        { className: "cell" },
-	        React.createElement("div", { className: "block off" })
-	    );
-	};
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Player = exports.ACCESSIBLE = exports.ID = undefined;
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	var ID = exports.ID = 999;
-
-	var ACCESSIBLE = exports.ACCESSIBLE = true;
-
-	var Player = exports.Player = function Player() {
-	    return React.createElement(
-	        "div",
-	        { className: "cell" },
-	        React.createElement("div", { className: "block player" })
-	    );
-	};
-
-/***/ },
-/* 170 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Zombie = exports.ACCESSIBLE = exports.ID = undefined;
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	var _events = __webpack_require__(165);
-
-	var _index = __webpack_require__(161);
-
-	var _algorithms = __webpack_require__(164);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	var ID = exports.ID = 998;
-
-	var ACCESSIBLE = exports.ACCESSIBLE = false;
-
-	var Zombie = exports.Zombie = React.createClass({
-	    displayName: "Zombie",
+	exports.default = {
 	    getInitialState: function getInitialState() {
 	        return {
-	            id: Math.floor(Math.random() * 1000000) + ''
+	            anim: ""
 	        };
-	    },
-	    componentDidMount: function componentDidMount() {
-	        (0, _events.on)("turn", this.state.id, this.turn);
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	        (0, _events.off)("turn", this.state.id);
-	    },
-	    getDistanceToPlayer: function getDistanceToPlayer() {
-	        return (0, _algorithms.distance)({
-	            x: this.props.context.enemy.x,
-	            y: this.props.context.enemy.y
-	        }, {
-	            x: this.props.context.playerX,
-	            y: this.props.context.playerY
-	        });
-	    },
-	    move: function move(to) {
-	        this.props.context.enemy.x = to.x;
-	        this.props.context.enemy.y = to.y;
-	        (0, _events.emit)("rerender");
-	    },
-	    turn: function turn() {
-	        if (this.getDistanceToPlayer() > 1) {
-	            var path = _algorithms.AStar.calculatePath(this.props.context.map, {
-	                x: this.props.context.enemy.x,
-	                y: this.props.context.enemy.y
-	            }, {
-	                x: this.props.context.playerX,
-	                y: this.props.context.playerY
-	            });
-
-	            if (path && path.length >= 2) {
-	                this.move(path[1]);
-	            }
-	        } else {
-	            console.log('attack');
-	        }
 	    },
 
 	    mouseOver: function mouseOver() {
@@ -20584,184 +20321,11 @@
 
 	    mouseOut: function mouseOut() {
 	        this.setState({ anim: "" });
-	    },
-
-	    render: function render() {
-	        return React.createElement(
-	            "div",
-	            { className: "cell" },
-	            React.createElement("div", {
-	                onMouseOver: this.mouseOver,
-	                onMouseOut: this.mouseOut,
-	                className: "block zombie " + this.state.anim
-	            })
-	        );
-	    }
-	});
-
-/***/ },
-/* 171 */,
-/* 172 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	var _commons = __webpack_require__(160);
-
-	var _commons2 = _interopRequireDefault(_commons);
-
-	var _column = __webpack_require__(173);
-
-	var _column2 = _interopRequireDefault(_column);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	exports.default = function (_ref) {
-	    var state = _ref.state;
-
-	    var viewport = _commons2.default.cropToViewport(state.viewport, state.map, state.player, state.enemies);
-
-	    return React.createElement(
-	        "div",
-	        { className: "field" },
-	        viewport.map(function (column, index) {
-	            return React.createElement(_column2.default, {
-	                column: column,
-	                index: index,
-	                key: index
-	            });
-	        })
-	    );
-	};
-
-/***/ },
-/* 173 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	var _cell = __webpack_require__(174);
-
-	var _cell2 = _interopRequireDefault(_cell);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	exports.default = function (_ref) {
-	    var column = _ref.column;
-
-	    return React.createElement(
-	        "div",
-	        { className: "column" },
-	        column.map(function (cell, index) {
-	            return React.createElement(_cell2.default, { key: index, cell: cell });
-	        })
-	    );
-	};
-
-/***/ },
-/* 174 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	var _index = __webpack_require__(161);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	exports.default = function (_ref) {
-	    var cell = _ref.cell;
-
-	    switch (cell.t) {
-	        case _index.Off.ID:
-	            return React.createElement(_index.Off.Off, { context: cell, parent: undefined });
-	        case _index.Floor.ID:
-	            return React.createElement(_index.Floor.Floor, { context: cell, parent: undefined });
-	        case _index.Wall.ID:
-	            return React.createElement(_index.Wall.Wall, { context: cell, parent: undefined });
-	        case _index.Player.ID:
-	            return React.createElement(_index.Player.Player, { context: cell, parent: undefined });
-	        case _index.Door.ID:
-	            return React.createElement(_index.Door.Door, { context: cell, parent: undefined });
-	        case _index.DoorOpen.ID:
-	            return React.createElement(_index.DoorOpen.DoorOpen, { context: cell, parent: undefined });
-	        case _index.Zombie.ID:
-	            return React.createElement(_index.Zombie.Zombie, { context: cell, parent: undefined });
-	        default:
-	            return null;
 	    }
 	};
 
 /***/ },
-/* 175 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	exports.default = function (_ref) {
-	    var log = _ref.log;
-
-	    return React.createElement(
-	        "div",
-	        { className: "console" },
-	        log.messages.map(function (message, index) {
-	            return React.createElement(
-	                "div",
-	                { key: index },
-	                React.createElement(
-	                    "span",
-	                    { className: "prompt" },
-	                    "(" + (log.count - index) + ")>"
-	                ),
-	                React.createElement(
-	                    "span",
-	                    { className: message.style },
-	                    message.text
-	                )
-	            );
-	        })
-	    );
-	};
-
-/***/ },
-/* 176 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20771,20 +20335,40 @@
 	});
 	exports.dispatch = exports.subscribe = exports.store = undefined;
 
-	var _redux = __webpack_require__(177);
+	var _redux = __webpack_require__(167);
 
-	var _initial_state = __webpack_require__(187);
+	var _initial_state = __webpack_require__(176);
 
 	var _initial_state2 = _interopRequireDefault(_initial_state);
 
-	var _move = __webpack_require__(191);
+	var _move = __webpack_require__(177);
 
-	var _log = __webpack_require__(189);
+	var _log = __webpack_require__(178);
+
+	var _toggle = __webpack_require__(179);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function accessible(block) {
+	    if (block.t === 3 || block.t === 2 || block.t === 998) {
+	        return false;
+	    }
+
+	    return true;
+	}
+
+	var prepare = function prepare(state) {
+	    for (var y = 0; y < state.map.length; y++) {
+	        for (var x = 0; x < state.map[0].length; x++) {
+	            state.map[y][x].a = accessible(state.map[y][x]);
+	        }
+	    }
+
+	    return state;
+	};
+
 	var game = function game() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? _initial_state2.default : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? prepare(_initial_state2.default) : arguments[0];
 	    var action = arguments[1];
 
 	    switch (action.type) {
@@ -20794,6 +20378,10 @@
 	            return Object.assign({}, state, {
 	                log: (0, _log.log_reducer)(state, { text: action.direction, style: "normal" }),
 	                viewport: (0, _move.move_reducer)(state, action)
+	            });
+	        case "TOGGLE_DOOR":
+	            return Object.assign({}, state, {
+	                map: (0, _toggle.toggle_reducer)(state, action)
 	            });
 	        case "HELP":
 	            return Object.assign({}, state, { log: (0, _log.help_reducer)(state) });
@@ -20809,7 +20397,7 @@
 	var dispatch = exports.dispatch = store.dispatch;
 
 /***/ },
-/* 177 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20818,23 +20406,23 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _createStore = __webpack_require__(178);
+	var _createStore = __webpack_require__(168);
 
 	var _createStore2 = _interopRequireDefault(_createStore);
 
-	var _utilsCombineReducers = __webpack_require__(180);
+	var _utilsCombineReducers = __webpack_require__(170);
 
 	var _utilsCombineReducers2 = _interopRequireDefault(_utilsCombineReducers);
 
-	var _utilsBindActionCreators = __webpack_require__(183);
+	var _utilsBindActionCreators = __webpack_require__(173);
 
 	var _utilsBindActionCreators2 = _interopRequireDefault(_utilsBindActionCreators);
 
-	var _utilsApplyMiddleware = __webpack_require__(184);
+	var _utilsApplyMiddleware = __webpack_require__(174);
 
 	var _utilsApplyMiddleware2 = _interopRequireDefault(_utilsApplyMiddleware);
 
-	var _utilsCompose = __webpack_require__(185);
+	var _utilsCompose = __webpack_require__(175);
 
 	var _utilsCompose2 = _interopRequireDefault(_utilsCompose);
 
@@ -20845,7 +20433,7 @@
 	exports.compose = _utilsCompose2['default'];
 
 /***/ },
-/* 178 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20855,7 +20443,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utilsIsPlainObject = __webpack_require__(179);
+	var _utilsIsPlainObject = __webpack_require__(169);
 
 	var _utilsIsPlainObject2 = _interopRequireDefault(_utilsIsPlainObject);
 
@@ -21013,7 +20601,7 @@
 	}
 
 /***/ },
-/* 179 */
+/* 169 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21049,7 +20637,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 180 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -21059,17 +20647,17 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _createStore = __webpack_require__(178);
+	var _createStore = __webpack_require__(168);
 
-	var _isPlainObject = __webpack_require__(179);
+	var _isPlainObject = __webpack_require__(169);
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _mapValues = __webpack_require__(181);
+	var _mapValues = __webpack_require__(171);
 
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 
-	var _pick = __webpack_require__(182);
+	var _pick = __webpack_require__(172);
 
 	var _pick2 = _interopRequireDefault(_pick);
 
@@ -21186,7 +20774,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 181 */
+/* 171 */
 /***/ function(module, exports) {
 
 	/**
@@ -21211,7 +20799,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 182 */
+/* 172 */
 /***/ function(module, exports) {
 
 	/**
@@ -21238,7 +20826,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 183 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21248,7 +20836,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _mapValues = __webpack_require__(181);
+	var _mapValues = __webpack_require__(171);
 
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 
@@ -21297,7 +20885,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 184 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21310,7 +20898,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _compose = __webpack_require__(185);
+	var _compose = __webpack_require__(175);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
@@ -21363,7 +20951,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 185 */
+/* 175 */
 /***/ function(module, exports) {
 
 	/**
@@ -21393,8 +20981,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 186 */,
-/* 187 */
+/* 176 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -21424,102 +21011,7 @@
 	};
 
 /***/ },
-/* 188 */,
-/* 189 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.log_reducer = exports.welcome_reducer = exports.help_reducer = undefined;
-
-	var _commons = __webpack_require__(160);
-
-	var _commons2 = _interopRequireDefault(_commons);
-
-	var _initial_state = __webpack_require__(187);
-
-	var _initial_state2 = _interopRequireDefault(_initial_state);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var LOG_SIZE = 4;
-
-	var help_reducer = exports.help_reducer = function help_reducer(state) {
-	    return {
-	        count: state.log.count + 4,
-	        messages: [{ text: "Use cursor keys to move. Use", style: "help" }, { text: "the mouse to interact with things.", style: "help" }, { text: "Hover items to see if they can be", style: "help" }, { text: "interacted with.", style: "help" }]
-	    };
-	};
-
-	var welcome_reducer = exports.welcome_reducer = function welcome_reducer(state) {
-	    return {
-	        count: state.log.count + 4,
-	        messages: [{ text: "Welcome to react-rogue!", style: "normal" }, { text: "If you need help,", style: "nornal" }, { text: "type `h`", style: "help" }, { text: "Good luck!", style: "normal" }]
-	    };
-	};
-
-	var log_reducer = exports.log_reducer = function log_reducer(state, action) {
-	    state.log.messages.push({ text: action.text, style: action.style });
-
-	    return {
-	        count: state.log.count + 1,
-	        messages: state.log.messages.slice(-LOG_SIZE)
-	    };
-	};
-
-/***/ },
-/* 190 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var React = _interopRequireWildcard(_react);
-
-	var _store = __webpack_require__(176);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	exports.default = React.createClass({
-	    displayName: "controls",
-	    componentWillMount: function componentWillMount() {
-	        document.addEventListener("keydown", this.keyDown);
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	        // Cleanup
-	        document.removeEventListener("keydown", this.keyDown);
-	    },
-	    keyDown: function keyDown(key) {
-	        switch (key.keyCode) {
-	            case 38:
-	                (0, _store.dispatch)({ type: "MOVE", direction: "north" });break;
-	            case 40:
-	                (0, _store.dispatch)({ type: "MOVE", direction: "south" });break;
-	            case 37:
-	                (0, _store.dispatch)({ type: "MOVE", direction: "west" });break;
-	            case 39:
-	                (0, _store.dispatch)({ type: "MOVE", direction: "east" });break;
-	            case 72:
-	                (0, _store.dispatch)({ type: "HELP" });break;
-	            default:
-	                break;
-	        }
-	    },
-	    render: function render() {
-	        return null;
-	    }
-	});
-
-/***/ },
-/* 191 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21533,7 +21025,7 @@
 
 	var _commons2 = _interopRequireDefault(_commons);
 
-	var _initial_state = __webpack_require__(187);
+	var _initial_state = __webpack_require__(176);
 
 	var _initial_state2 = _interopRequireDefault(_initial_state);
 
@@ -21566,6 +21058,483 @@
 	            return move("x", -1, state);
 	    }
 	};
+
+/***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.log_reducer = exports.welcome_reducer = exports.help_reducer = undefined;
+
+	var _initial_state = __webpack_require__(176);
+
+	var _initial_state2 = _interopRequireDefault(_initial_state);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var LOG_SIZE = 4;
+
+	var help_reducer = exports.help_reducer = function help_reducer(state) {
+	    return {
+	        count: state.log.count + 4,
+	        messages: [{ text: "Use cursor keys to move. Use", style: "help" }, { text: "the mouse to interact with things.", style: "help" }, { text: "Hover items to see if they can be", style: "help" }, { text: "interacted with.", style: "help" }]
+	    };
+	};
+
+	var welcome_reducer = exports.welcome_reducer = function welcome_reducer(state) {
+	    return {
+	        count: state.log.count + 4,
+	        messages: [{ text: "Welcome to react-rogue!", style: "normal" }, { text: "If you need help,", style: "nornal" }, { text: "type `h`", style: "help" }, { text: "Good luck!", style: "normal" }]
+	    };
+	};
+
+	var log_reducer = exports.log_reducer = function log_reducer(state, action) {
+	    state.log.messages.push({ text: action.text, style: action.style });
+
+	    return {
+	        count: state.log.count + 1,
+	        messages: state.log.messages.slice(-LOG_SIZE)
+	    };
+	};
+
+/***/ },
+/* 179 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var toggle_reducer = exports.toggle_reducer = function toggle_reducer(state, action) {
+	    var x = action.x,
+	        y = action.y;
+	    state.map[y][x].a = !state.map[y][x].a;
+	    return state.map;
+	};
+
+/***/ },
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Wall = exports.ACCESSIBLE = exports.ID = undefined;
+
+	var _react = __webpack_require__(1);
+
+	var React = _interopRequireWildcard(_react);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var ID = exports.ID = 2;
+
+	var ACCESSIBLE = exports.ACCESSIBLE = false;
+
+	var Wall = exports.Wall = function Wall(_ref) {
+	    var context = _ref.context;
+
+	    return React.createElement(
+	        "div",
+	        { className: "cell" },
+	        React.createElement("div", { className: "block " + (context.type || "wall") })
+	    );
+	};
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Floor = exports.ACCESSIBLE = exports.ID = undefined;
+
+	var _react = __webpack_require__(1);
+
+	var React = _interopRequireWildcard(_react);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var ID = exports.ID = 1;
+
+	var ACCESSIBLE = exports.ACCESSIBLE = true;
+
+	var Floor = exports.Floor = function Floor(_ref) {
+	    var context = _ref.context;
+
+	    return React.createElement(
+	        "div",
+	        { className: "cell" },
+	        React.createElement("div", { className: "block floor " + context.type })
+	    );
+	};
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Off = exports.ACCESSIBLE = exports.ID = undefined;
+
+	var _react = __webpack_require__(1);
+
+	var React = _interopRequireWildcard(_react);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var ID = exports.ID = 0;
+
+	var ACCESSIBLE = exports.ACCESSIBLE = false;
+
+	var Off = exports.Off = function Off() {
+	    return React.createElement(
+	        "div",
+	        { className: "cell" },
+	        React.createElement("div", { className: "block off" })
+	    );
+	};
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Player = exports.ACCESSIBLE = exports.ID = undefined;
+
+	var _react = __webpack_require__(1);
+
+	var React = _interopRequireWildcard(_react);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var ID = exports.ID = 999;
+
+	var ACCESSIBLE = exports.ACCESSIBLE = true;
+
+	var Player = exports.Player = function Player() {
+	    return React.createElement(
+	        "div",
+	        { className: "cell" },
+	        React.createElement("div", { className: "block player" })
+	    );
+	};
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Zombie = exports.ACCESSIBLE = exports.ID = undefined;
+
+	var _react = __webpack_require__(1);
+
+	var React = _interopRequireWildcard(_react);
+
+	var _events = __webpack_require__(164);
+
+	var _index = __webpack_require__(161);
+
+	var _algorithms = __webpack_require__(163);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var ID = exports.ID = 998;
+
+	var ACCESSIBLE = exports.ACCESSIBLE = false;
+
+	var Zombie = exports.Zombie = React.createClass({
+	    displayName: "Zombie",
+	    getInitialState: function getInitialState() {
+	        return {
+	            id: Math.floor(Math.random() * 1000000) + ''
+	        };
+	    },
+	    componentDidMount: function componentDidMount() {
+	        (0, _events.on)("turn", this.state.id, this.turn);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        (0, _events.off)("turn", this.state.id);
+	    },
+	    getDistanceToPlayer: function getDistanceToPlayer() {
+	        return (0, _algorithms.distance)({
+	            x: this.props.context.enemy.x,
+	            y: this.props.context.enemy.y
+	        }, {
+	            x: this.props.context.playerX,
+	            y: this.props.context.playerY
+	        });
+	    },
+	    move: function move(to) {
+	        this.props.context.enemy.x = to.x;
+	        this.props.context.enemy.y = to.y;
+	        (0, _events.emit)("rerender");
+	    },
+	    turn: function turn() {
+	        if (this.getDistanceToPlayer() > 1) {
+	            var path = _algorithms.AStar.calculatePath(this.props.context.map, {
+	                x: this.props.context.enemy.x,
+	                y: this.props.context.enemy.y
+	            }, {
+	                x: this.props.context.playerX,
+	                y: this.props.context.playerY
+	            });
+
+	            if (path && path.length >= 2) {
+	                this.move(path[1]);
+	            }
+	        } else {
+	            console.log('attack');
+	        }
+	    },
+
+	    mouseOver: function mouseOver() {
+	        this.setState({ anim: " animated pulse" });
+	    },
+
+	    mouseOut: function mouseOut() {
+	        this.setState({ anim: "" });
+	    },
+
+	    render: function render() {
+	        return React.createElement(
+	            "div",
+	            { className: "cell" },
+	            React.createElement("div", {
+	                onMouseOver: this.mouseOver,
+	                onMouseOut: this.mouseOut,
+	                className: "block zombie " + this.state.anim
+	            })
+	        );
+	    }
+	});
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var React = _interopRequireWildcard(_react);
+
+	var _commons = __webpack_require__(160);
+
+	var _commons2 = _interopRequireDefault(_commons);
+
+	var _column = __webpack_require__(186);
+
+	var _column2 = _interopRequireDefault(_column);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	exports.default = function (_ref) {
+	    var state = _ref.state;
+
+	    var viewport = _commons2.default.cropToViewport(state.viewport, state.map, state.player, state.enemies);
+
+	    return React.createElement(
+	        "div",
+	        { className: "field" },
+	        viewport.map(function (column, index) {
+	            return React.createElement(_column2.default, {
+	                column: column,
+	                index: index,
+	                key: index
+	            });
+	        })
+	    );
+	};
+
+/***/ },
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var React = _interopRequireWildcard(_react);
+
+	var _cell = __webpack_require__(187);
+
+	var _cell2 = _interopRequireDefault(_cell);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	exports.default = function (_ref) {
+	    var column = _ref.column;
+
+	    return React.createElement(
+	        "div",
+	        { className: "column" },
+	        column.map(function (cell, index) {
+	            return React.createElement(_cell2.default, { key: index, cell: cell });
+	        })
+	    );
+	};
+
+/***/ },
+/* 187 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var React = _interopRequireWildcard(_react);
+
+	var _index = __webpack_require__(161);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	exports.default = function (_ref) {
+	    var cell = _ref.cell;
+
+	    switch (cell.t) {
+	        case _index.Off.ID:
+	            return React.createElement(_index.Off.Off, { context: cell, parent: undefined });
+	        case _index.Floor.ID:
+	            return React.createElement(_index.Floor.Floor, { context: cell, parent: undefined });
+	        case _index.Wall.ID:
+	            return React.createElement(_index.Wall.Wall, { context: cell, parent: undefined });
+	        case _index.Player.ID:
+	            return React.createElement(_index.Player.Player, { context: cell, parent: undefined });
+	        case _index.Door.ID:
+	            return React.createElement(_index.Door.Door, { context: cell, parent: undefined });
+	        case _index.Zombie.ID:
+	            return React.createElement(_index.Zombie.Zombie, { context: cell, parent: undefined });
+	        default:
+	            return null;
+	    }
+	};
+
+/***/ },
+/* 188 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var React = _interopRequireWildcard(_react);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	exports.default = function (_ref) {
+	    var log = _ref.log;
+
+	    return React.createElement(
+	        "div",
+	        { className: "console" },
+	        log.messages.map(function (message, index) {
+	            return React.createElement(
+	                "div",
+	                { key: index },
+	                React.createElement(
+	                    "span",
+	                    { className: "prompt" },
+	                    "(" + (log.count - index) + ")>"
+	                ),
+	                React.createElement(
+	                    "span",
+	                    { className: message.style },
+	                    message.text
+	                )
+	            );
+	        })
+	    );
+	};
+
+/***/ },
+/* 189 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var React = _interopRequireWildcard(_react);
+
+	var _store = __webpack_require__(166);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	exports.default = React.createClass({
+	    displayName: "controls",
+	    componentWillMount: function componentWillMount() {
+	        document.addEventListener("keydown", this.keyDown);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        // Cleanup
+	        document.removeEventListener("keydown", this.keyDown);
+	    },
+	    keyDown: function keyDown(key) {
+	        switch (key.keyCode) {
+	            case 38:
+	                (0, _store.dispatch)({ type: "MOVE", direction: "north" });break;
+	            case 40:
+	                (0, _store.dispatch)({ type: "MOVE", direction: "south" });break;
+	            case 37:
+	                (0, _store.dispatch)({ type: "MOVE", direction: "west" });break;
+	            case 39:
+	                (0, _store.dispatch)({ type: "MOVE", direction: "east" });break;
+	            case 72:
+	                (0, _store.dispatch)({ type: "HELP" });break;
+	            default:
+	                break;
+	        }
+	    },
+	    render: function render() {
+	        return null;
+	    }
+	});
 
 /***/ }
 /******/ ]);

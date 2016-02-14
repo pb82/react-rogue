@@ -1,6 +1,5 @@
 "use strict";
 
-import C from "../../components/commons";
 import initial_state from "../initial_state";
 
 const LOG_SIZE = 4;

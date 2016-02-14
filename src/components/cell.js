@@ -3,7 +3,6 @@
 import * as React from "react";
 import {
     Door,
-    DoorOpen,
     Wall,
     Off,
     Player,
@@ -18,7 +17,6 @@ export default ({cell}) => {
         case Wall.ID: return <Wall.Wall context={cell} parent={this} />;
         case Player.ID: return <Player.Player context={cell} parent={this} />;
         case Door.ID: return <Door.Door context={cell} parent={this} />;
-        case DoorOpen.ID: return <DoorOpen.DoorOpen context={cell} parent={this} />;
         case Zombie.ID: return <Zombie.Zombie context={cell} parent={this} />;
         default: return null;
     }

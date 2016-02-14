@@ -1,7 +1,5 @@
 "use strict";
 
-import { Zombie, Player, Off, accessible } from "./blocks/index";
-
 export default {
     /**
      * Return a mask that is used to expand the field
@@ -21,7 +19,7 @@ export default {
         for (let x = 0; x < s; x++) {
             let row = [];
             for (let y = 0; y < s; y++) {
-                row.push({t: Off.ID});
+                row.push({t: 0});
             }
             mask.push(row);
         }
@@ -64,6 +62,7 @@ export default {
                 if (enemy) {
                     row.push({
                         t: enemy.id,
+                        a: false,
                         enemy: enemy,
                         playerX: viewport.x,
                         playerY: viewport.y,
@@ -71,11 +70,11 @@ export default {
                     });
                 } else if (x === viewport.x && y === viewport.y) {
                     // The players position: draw player sprite
-                    row.push({t: Player.ID});
+                    row.push({t: 999, a: true});
                     continue;
                 } else if (y < 0 || x < 0) {
                     // Out of bounds (too small)
-                    row.push({t: Off.ID, visible: false});
+                    row.push({t: 0, visible: false, a: false});
                 } else if (map[y] && map[y][x]) {
                     // Current position is valid and inside the map
                     var block = map[y][x];
@@ -90,7 +89,7 @@ export default {
                     row.push(block);
                 } else {
                     // Out of bounds (too large)
-                    row.push({t: Off.ID, visible: false});
+                    row.push({t: 0, visible: false});
                 }
             }
             region.push(row);
@@ -127,7 +126,7 @@ export default {
         r[y][x].visible = true;
 
         // Expand recursively on accessible neighbours
-        if (r[y] && r[y][x] && accessible(r[y][x])) {
+        if (r[y] && r[y][x] && r[y][x].a) {
             this.expand(r, m, x + 1, y, c - 1);
             this.expand(r, m, x, y + 1, c - 1);
             this.expand(r, m, x, y - 1, c - 1);
@@ -156,7 +155,7 @@ export default {
                     return callback(true, viewport);
                 }
 
-                if (accessible(map[viewport.y][viewport.x + dx])) {
+                if (map[viewport.y][viewport.x + dx].a) {
                     viewport.x += dx;
                     return callback(null, viewport);
                 } else {
@@ -170,7 +169,7 @@ export default {
                     return callback(true, viewport);
                 }
 
-                if (accessible(map[viewport.y + dy][viewport.x])) {
+                if (map[viewport.y + dy][viewport.x].a) {
                     viewport.y += dy;
                     return callback(null, viewport);
                 } else {
